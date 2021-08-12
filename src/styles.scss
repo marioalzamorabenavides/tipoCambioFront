@@ -1,1 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/scss/_functions.scss';
+@import '~bootstrap/scss/_variables.scss';
+@import '~bootstrap/scss/bootstrap-grid.scss';
+@import '~bootstrap/scss/bootstrap-reboot.scss';
+@import '~bootstrap/scss/_utilities.scss';
+
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$tipoCambioFront-primary: mat-palette($mat-green, 700);
+$tipoCambioFront-accent: mat-palette($mat-pink, A200, A100, A400);
+$tipoCambioFront-warn: mat-palette($mat-red);
+
+$tipoCambioFront-theme: mat-light-theme((
+  color: (
+    primary: $tipoCambioFront-primary,
+    accent: $tipoCambioFront-accent,
+    warn: $tipoCambioFront-warn,
+  )
+));
+
+@include angular-material-theme($tipoCambioFront-theme);
+
+html, body { height: 100%; background-color: #f7f7f7;}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+mat-form-field{
+  width: 100% !important;
+}

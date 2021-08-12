@@ -1,0 +1,91 @@
+<h1 class="mat-display-1 mb-4">Tipo de Cambio</h1>
+<div class="row">
+    <div class="col-lg-12">
+        <mat-card class="mat-elevation-z5 mb-3">
+            <h2>Seleccione Moneda</h2>
+            <div class="row justify-content-between">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Moneda Origen</mat-label>
+                        <mat-select [formControl]="typeChange">
+                            <mat-option *ngFor="let data of currencyData" [value]="data?.currency_id">
+                                {{data?.currency_desc}} ({{data?.currency}})
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4" *ngIf="editRate">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nuevo Valor</mat-label>
+                        <input type="number" matInput [formControl]="exchangeRate">
+                        <span matSuffix>
+                            {{(dataSelected.currency_change_to | currency:currencyData)?.currency}}
+                            {{(dataSelected.currency_change_to | currency:currencyData)?.currency_desc}}
+                        </span>
+                        <mat-error>Este campo es requerido</mat-error>
+                    </mat-form-field>
+                    <button (click)="putExchange()" [disabled]="exchangeRate.invalid" mat-raised-button color="primary">Actualizar</button>
+                </div>
+            </div>
+        </mat-card>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z5 w-100">
+
+            <ng-container matColumnDef="exchange_id">
+                <th mat-header-cell *matHeaderCellDef> No. </th>
+                <td mat-cell *matCellDef="let element"> {{element.exchange_id}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="currency_change_from">
+                <th mat-header-cell *matHeaderCellDef> Moneda Origen </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.currency_change_from | currency:currencyData)?.currency_desc}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="currency_change_to">
+                <th mat-header-cell *matHeaderCellDef> Moneda Destino </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.currency_change_to | currency:currencyData)?.currency_desc}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="exchange_rate">
+                <th mat-header-cell *matHeaderCellDef> Tipo de Cambio </th>
+                <td mat-cell *matCellDef="let element">
+                    {{(element.currency_change_to | currency:currencyData)?.currency}}
+                    {{element.exchange_rate}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="exchange_register">
+                <th mat-header-cell *matHeaderCellDef> Creado </th>
+                <td mat-cell *matCellDef="let element"> {{element.exchange_register | date: 'M/d/yy, h:mm a'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="exchange_update">
+                <th mat-header-cell *matHeaderCellDef> Actualizado </th>
+                <td mat-cell *matCellDef="let element"> {{element.exchange_update | date: 'M/d/yy, h:mm a'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="editExchangeRate">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button 
+                        *ngIf="element.exchange_id!=dataSelected?.exchange_id" 
+                        (click)="goToEdit(element)" color="primary">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+
+                    <button mat-icon-button 
+                        *ngIf="element.exchange_id==dataSelected?.exchange_id && editRate" 
+                        (click)="editRate=false;dataSelected= null" color="warn">
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>
